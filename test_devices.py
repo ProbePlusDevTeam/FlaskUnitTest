@@ -42,4 +42,23 @@ def test_register_device_exist(app):
         resp = response.json()
         assert resp == {'status': 'exists'}
 
-# def test_alldevices(app)
+def test_register_device_empty(app):
+    with app.app_context():
+        path = 'register_device'
+        val = {
+            "device_id":None,
+            "org_id":None,
+            "mfg":None,
+            "model":None
+        }
+        response = requests.post(baseUrl+path, json=val)
+        # response = requests.post(baseUrl+path, json={})
+        stat = response.status_code
+        print(stat)
+        resp = response.json()
+        # assert resp == {'status': 'exists'}
+        assert stat == 500
+
+# def test_alldevices(app):
+#     with app.app_context():
+#         path = 'alldevices'
