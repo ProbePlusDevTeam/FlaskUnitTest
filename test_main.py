@@ -1,26 +1,21 @@
-# import api.main
-# import json
-import requests
+import sys
+import requests, pytest
+from flask import jsonify, Flask
 
-baseUrl = "http://127.0.0.1:5000/"
+# sys.path.append('/home/guy/Documents/GitHub-UnitTest/Expatriation/api')
 
-# def test_status():
-#    response = main.status()
-#    print ("dddddddddddddddddddddddddddddddddddddddddddddddd", response)
-# #    assert response
-# #    assert response.get("Code") == 200
-# test_status()
+baseUrl = 'http://10.10.3.219:5000/'
 
-def test_index():
-    response = requests.get(url=baseUrl)
-    assert response.status_code == 200
+@pytest.fixture(scope='module')
+def app():
+    app = Flask(__name__)
+    with app.app_context():
+        yield app
 
-def test_status() :
-    path = "status"
-    response = requests.get(url=baseUrl+path)
-    # responseJson = json.loads(response.text)
-    assert response.status_code == 200
-    # assert jsonpath.jsonpath(responseJson,'$.data.first_name')[0] == 'Janet'
-    # assert jsonpath.jsonpath(responseJson,'$.data.id')[0] == 2
-
-
+def test_status(app):
+    with app.app_context():
+        path = 'status'
+        response = requests.get(baseUrl+path)
+        # response.raise_for_status()
+        resp = response.json()
+        assert resp == "OK"
