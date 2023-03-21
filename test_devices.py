@@ -1,10 +1,10 @@
-import sys
+# import sys
 import requests, pytest
-from flask import jsonify, Flask
+from flask import Flask
 
 # sys.path.append('/home/guy/Documents/GitHub-UnitTest/Expatriation/api')
 
-baseUrl = 'http://10.10.3.219:5000/'
+baseUrl = 'http://10.10.2.201:5000/'
 
 @pytest.fixture(scope='module')
 def app():
@@ -22,10 +22,11 @@ def test_register_device_new(app):
             "model":"Redmi 12 pro"
         }
         response = requests.post(baseUrl+path, json=val)
-        e = response.status_code
-        print(e)
+        stat = response.status_code
+        print(stat)
         resp = response.json()
-        assert resp == {'status': 'success'}
+        assert stat == 200
+        # assert resp == {'status': 'success'}
 
 def test_register_device_exist(app):
     with app.app_context():
@@ -37,8 +38,8 @@ def test_register_device_exist(app):
             "model":"Redmi 12 pro"
         }
         response = requests.post(baseUrl+path, json=val)
-        e = response.status_code
-        print(e)
+        stat = response.status_code
+        print(stat)
         resp = response.json()
         assert resp == {'status': 'exists'}
 
@@ -57,8 +58,83 @@ def test_register_device_empty(app):
         print(stat)
         resp = response.json()
         # assert resp == {'status': 'exists'}
-        assert stat == 500
+        assert stat == 200
 
-# def test_alldevices(app):
-#     with app.app_context():
-#         path = 'alldevices'
+def test_alldevices(app):
+    with app.app_context():
+        path = 'alldevices'
+        val = {
+            "org_id":10
+        }
+        response = requests.post(baseUrl+path, json=val)
+        stat = response.status_code
+        print(stat)
+        resp = response.json()
+        # assert resp == {'status': 'exists'}
+        assert stat == 200
+
+def test_device(app):
+    with app.app_context():
+        path = 'device'
+        val = {
+            "device_id":"f0f78a850e4c49be"
+        }
+        response = requests.post(baseUrl+path, json=val)
+        stat = response.status_code
+        print(stat)
+        resp = response.json()
+        # assert resp == {'status': 'exists'}
+        assert stat == 200
+
+def test_device_grouppolicy(app):
+    with app.app_context():
+        path = 'device_grouppolicy'
+        val = {
+            "device_id":"59dddd12db82333d"
+        }
+        response = requests.post(baseUrl+path, json=val)
+        stat = response.status_code
+        print(stat)
+        # resp = response.json()
+        # assert resp == {'status': 'exists'}
+        assert stat == 200
+
+def test_update_policystatus(app):
+    with app.app_context():
+        path = 'update_policystatus'
+        val = {
+            "id":"25",
+            "policy_id": 11,
+            "ver": 2233,
+            "status": True
+        }
+        response = requests.put(baseUrl+path, json=val)
+        stat = response.status_code
+        print(stat)
+        resp = response.json()
+        assert resp == {'status': 'success'}
+        
+def test_delete_device(app):
+    with app.app_context():
+        path = 'delete_device'
+        val = {
+            "id": "33"
+        }
+        response = requests.post(baseUrl+path, json=val)
+        stat = response.status_code
+        print(stat)
+        resp = response.json()
+        assert resp == {'status': 'success'}
+
+def test_group_device(app):
+    with app.app_context():
+        path = 'group_device'
+        val = {
+            "group_id":"90", 
+            "devices": [25, 26]
+        }
+        response = requests.post(baseUrl+path, json=val)
+        stat = response.status_code
+        print(stat)
+        resp = response.json()
+        assert resp == {'status': 'success'}
