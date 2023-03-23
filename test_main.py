@@ -1,10 +1,10 @@
-import sys
+# import sys
 import requests, pytest
 from flask import jsonify, Flask
 
 # sys.path.append('/home/guy/Documents/GitHub-UnitTest/Expatriation/api')
 
-baseUrl = 'http://10.10.3.219:5000/'
+baseUrl = 'http://10.10.2.201:5000/'
 
 @pytest.fixture(scope='module')
 def app():
