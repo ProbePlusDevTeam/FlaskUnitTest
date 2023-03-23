@@ -15,7 +15,7 @@ db = os.getenv('mysql_DATABASE')
 
 print(host, username, password, db)
 
-baseUrl = 'http://10.10.3.115:5000/'
+baseUrl = 'http://10.10.2.221:5000/'
 
 @pytest.fixture(scope='module')
 def app():
@@ -60,26 +60,23 @@ def execute_query(query):
         result["error"]= data
         return result
 
-# def thesetup():
-#     query = "INSERT INTO users (id, user_name, password, first_name, last_name, mobile_number, country_code, email, sup_id, org_id, c_id, role, policy, created_at, updated_at) VALUES(5, 'test', 'test', '', '', '2147483647', 0, 'test@test.com', 0, 10, '0', 3, 'asd', '2023-02-16 16:35:31', '2023-02-16 16:35:31')"
-#     result = execute_query(query)
-#     print("Setup: ", result)
+def thesetup():
+    query = "INSERT INTO users (id, user_name, password, first_name, last_name, mobile_number, country_code, email, sup_id, org_id, c_id, role, policy, created_at, updated_at) VALUES(5, 'test', 'test', '', '', '2147483647', 0, 'test@test.com', 0, 10, '0', 3, 'asd', '2023-02-16 16:35:31', '2023-02-16 16:35:31')"
+    result = execute_query(query)
+    print("Setup: ", result)
 
-# def theteardown():
-#     query = "TRUNCATE TABLE users;"
-#     result = execute_query(query)
-#     print("Teardown: ", result)
+def theteardown():
+    query = "TRUNCATE TABLE users;"
+    result = execute_query(query)
+    print("Teardown: ", result)
 
 @pytest.fixture(scope="session")
 def environment(request):
     print("initial")
-    # thesetup()
-    query = "INSERT INTO users (id, user_name, password, first_name, last_name, mobile_number, country_code, email, sup_id, org_id, c_id, role, policy, created_at, updated_at) VALUES(5, 'test', 'test', '', '', '2147483647', 0, 'test@test.com', 0, 10, '0', 3, 'asd', '2023-02-16 16:35:31', '2023-02-16 16:35:31')"
-    result = execute_query(query)
-    print("Setup: ", result)
-    # def fin():
-    #     theteardown()
-    # request.addfinalizer(fin)
+    thesetup()
+    def fin():
+        theteardown()
+    request.addfinalizer(fin)
 
 # def test_adduser(app, environment):
 #     with app.app_context():
